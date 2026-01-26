@@ -34,9 +34,6 @@ pub enum Command {
         id: u32,
         #[arg(value_name = "AMOUNT")]
         amount: f64,
-        /// Add small description
-        #[arg(long, short, value_name = "DESCRIPTION")]
-        description: Option<String>,
     },
     /// Increase budget funds
     Increase {
@@ -104,11 +101,7 @@ impl Command {
                 amount: _,
                 description: _,
             } => "Increase funds",
-            Self::Initial {
-                id: _,
-                amount: _,
-                description: _,
-            } => "Set initial funds",
+            Self::Initial { id: _, amount: _ } => "Set initial funds",
             Self::Reduce {
                 id: _,
                 amount: _,
@@ -166,11 +159,7 @@ pub fn run(conn: &mut Connection, command: Command) {
             Ok(rows) => println!("{} record updates", rows),
             Err(error) => eprintln!("Error: {}", error),
         },
-        Command::Initial {
-            id: _,
-            amount: _,
-            description: _,
-        } => match set_initial_funds(conn, &command) {
+        Command::Initial { id: _, amount: _ } => match set_initial_funds(conn, &command) {
             Ok(rows) => println!("{} record updates", rows),
             Err(error) => eprintln!("Error: {}", error),
         },

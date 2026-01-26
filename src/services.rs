@@ -125,28 +125,10 @@ pub fn set_current_funds(conn: &mut Connection, command: &Command) -> Result<usi
 }
 
 pub fn set_initial_funds(conn: &mut Connection, command: &Command) -> Result<usize> {
-    if let Command::Initial {
-        id,
-        amount,
-        description,
-    } = command
-    {
+    if let Command::Initial { id, amount } = command {
         let mut budget = Budget::get_budget_by_id(conn, id)?;
-        let old_value = budget.initial_funds;
         budget.set_initial_funds(amount);
-        let new_value = budget.initial_funds;
-        let record = Record::new(
-            *id,
-            command.value(),
-            *amount,
-            old_value,
-            new_value,
-            description,
-        );
-        let tx = conn.transaction().unwrap();
-        let res = budget.update_budget(&tx)?;
-        record.insert_record(&tx)?;
-        tx.commit()?;
+        let res = budget.update_budget(conn)?;
         Ok(res)
     } else {
         Err(rusqlite::Error::InvalidQuery)
@@ -292,8 +274,7 @@ mod tests {
         let budget = Budget::new("budget_test", &500.0);
         let command = Command::Initial {
             id: 1,
-            amount: 100.0,
-            description: Some("test_description".to_string()),
+            amount: 100.0
         };
         let _ = budget.insert_budget(&conn);
         let _ = set_initial_funds(&mut conn, &command);

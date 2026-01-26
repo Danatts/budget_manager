@@ -55,7 +55,6 @@ Options:
 
 ### Features
 
-- [ ] Undo last action
 - [ ] Delete on cascade on tables
 - [ ] Edit records
 - [ ] Display warning when user is getting close to going over budget
@@ -63,7 +62,8 @@ Options:
 
 ### Fix
 
-- [ ] Change initial value when set initial budget command is call
+- [ ] Implement Display trait to Command enum
+- [ ] Undo change initial budget value
 
 ### Testing
 
